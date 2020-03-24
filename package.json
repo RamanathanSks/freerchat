@@ -1,0 +1,26 @@
+{
+  "name": "chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ser.js",
+  "scripts": {
+    "start": "nodemon ser.js"
+  },
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "0.0.0",
+    "require": "^2.4.20",
+    "rxjs": "~6.5.4",
+    "server": "^1.0.27",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0",
+    "tslib": "^1.10.0",
+    "zone.js": "~0.10.2"
+  },
+  "author": "ram",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
