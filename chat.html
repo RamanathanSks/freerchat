@@ -1,15 +1,21 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <metta name="viewport" content="width=device-width,initial-scale=1.0"></metta>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"></meta>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>chatr</title>
-        <!-- <script defer src="scri.js"></script> -->
         <style>
+            .jumbotron {
+            color:black ;
+            }
             #server-time{
-                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow';
                 font-size: large;
-                text-align: left;
+                text-align: right;
             }
             .style{
                 padding: 5px;
@@ -20,7 +26,7 @@
             }
             .con{
                 margin: 50px;
-                padding-bottom: 400px;
+                padding-bottom: 20px;
             }
             .contain{
                 margin: 30px;
@@ -35,29 +41,6 @@
                 overflow-y: visible;
                 margin: 2px;
             }
-            .inputbox{
-                border: 1px solid rgba(114, 114, 114, 0.555);
-                width: 650px;
-                height: 35px;
-                font-size: 20px;
-                border-radius:5px ;
-            }
-            .uinputbox{
-                border: 1px solid rgba(114, 114, 114, 0.555);
-                width: 500px;
-                height: 35px;
-                font-size: 20px;
-                border-radius:15px ;
-            }
-            .formin{
-                text-align: center;
-            }
-            .subbut{
-                height: 35px;
-                width: 100px;
-                border-radius: 9px;
-                background-color: rgb(30, 133, 192);
-            }
             .snd{
                 scroll-behavior: auto;
                 text-align: center;
@@ -68,47 +51,49 @@
             #divmsg{
                 display:none;
             }
-            .contain1{
-                margin: 25%;
-                font-size: medium;
-                align-content: center;
-                text-align: center;
-            }
             #alert{
                 display: none;
             }
             .messaged{
                 font-size: 20px;
-                font-family: Verdana, Geneva, Tahoma, sans-serif;
-                
+                font-family: Verdana, Geneva, Tahoma, sans-serif;  
+            }
+            #happy{
+                display: none;
             }
         </style>
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
-        <H1 style="text-align: center;font-family: Cursive;">RCHAT</H1>
-        <hr> 
-        <div id="server-time" ></div>
-        <br><br>
-        <div class="contain1" id="divusr">
-                <label style="font-family:Arial, Helvetica, sans-serif;" >USERNAME</label>&nbsp;&nbsp;&nbsp;<input type="text" id="user" autofocus class="uinputbox">&nbsp;&nbsp;
-                <input type="submit" value="ChatNOW" class="subbut" id="usrbut">
+        <div class="jumbotron text-center">
+            <h1 style="text-align: center;font-family: Cursive;" >RCHaT</h1> 
+            <div id="divusr">
+                <div class="form-inline">
+                    <input type="text" class="form-control" id="user" autofocus size="50" placeholder="Name" required>
+                    <button type="button" class="btn btn-primary" id="usrbut">Chat Now..</button>
+                </div>
+            </div>
+            <label id="happy" style="text-align: center;font-family: Cursive;"></label>
         </div>
+        <div id="server-time" ></div>
         <div class="contain" id="divmsg">
             <div class="con">
               <div class="style">
-                <div id="message_dis" class="dis">
-                </div>
+                <div id="message_dis" class="dis"></div>
               </div>
               <br>
-              <div id="fk"></div>
               <div class="snd" >
-                  <input type="text" id="msg" autofocus class="inputbox"><label id="alert" >plzz enter the message</label>&nbsp;&nbsp;
-                  <input type="submit"  class="subbut" id="snd">
+                <div id="divusr">
+                    <div class="form-inline">
+                        <input type="text" placeholder="Type your message.." class="form-control" autofocus size="50" id="msg" required>
+                        <button type="button" class="btn btn-primary" id="snd">Send</button>
+                        <label id="alert" >plzz enter the message</label>&nbsp;&nbsp;
+                    </div>
+                </div>
               </div>
             </div>
         </div>
-          <script >
+          <script>
             var socket=io();
             var msgdis=document.getElementById('message_dis');
             var input=document.getElementById('msg');
@@ -122,9 +107,12 @@
                 var usrname=document.getElementById('user').value;
                 var divmsg=document.getElementById('divmsg').style;
                 var divusr=document.getElementById('divusr').style;
+                var hap=document.getElementById('happy');
                 socket.emit('user',usrname);
+                hap.innerHTML=`Happy..Chatting ${usrname}`;
                 divusr.display="none";
                 divmsg.display="inline";
+                hap.style.display="inline";
             }
             input.addEventListener("keyup",function(event){
                 if (event.keyCode===13){
@@ -142,18 +130,18 @@
             }
             socket.on('broadcast',function(data){
                 var usrname=document.getElementById('user').value;
-                if (data.usr!=usrname){msgdis.innerHTML+=`<div class="messaged" style="text-align: center"><pre><b>${data.des}</b><pre></div>`;}
-                else{msgdis.innerHTML+=`<div class="messaged" style="text-align: center" ><pre><b>You are in...</b><pre></div>`;}
+                if (data.usr!=usrname){msgdis.innerHTML+=`<div class="messaged" style="text-align: center"><b>${data.des}</b></div><br>`;}
+                else{msgdis.innerHTML+=`<div class="messaged" style="text-align: center" ><b>You are in...</b></div><br>`;}
             });
             socket.on('new message',function(data){
                 var usrname=document.getElementById('user').value;
                 var al=document.getElementById('alert').style;
                 if (data.msg.length!=0){
                     if (data.usr==usrname){
-                        msgdis.innerHTML+=`<div class="messaged" ><pre><b>You :</b> ${data.msg}<pre></div>`;
+                        msgdis.innerHTML+=`<div class="messaged" ><b>You : </b>${data.msg}</div><br>`;
                     }
                     else{
-                        msgdis.innerHTML+=`<div class="messaged" ><pre><b>${data.usr} </b>: ${data.msg}<pre></div>`;
+                        msgdis.innerHTML+=`<div class="messaged" ><b>${data.usr} </b>: ${data.msg}</div><br>`;
                     }
                     al.display="none";
                 }
