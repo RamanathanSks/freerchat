@@ -32,7 +32,7 @@
                 margin: 30px;
                 font-size: medium;
                 overflow: scroll;
-                scroll-behavior: auto;
+                scroll-behavior: auto,smooth;
             }
             .dis{
                 font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -73,9 +73,12 @@
                     <button type="button" class="btn btn-primary" id="usrbut">Chat Now..</button>
                 </div>
             </div>
-            <label id="happy" style="text-align: center;font-family: Cursive;"></label>
-        </div>
-        <div id="server-time" ></div>
+            <div id="happy">
+                <label id="txt"  style="text-align: center;font-family: Cursive;"></label>
+                <p><button class="btn btn-primary" onclick="left()">leave</button></p>
+            </div>
+        </div>  
+        <div id="server-time"></div>
         <div class="contain" id="divmsg">
             <div class="con">
               <div class="style">
@@ -108,11 +111,16 @@
                 var divmsg=document.getElementById('divmsg').style;
                 var divusr=document.getElementById('divusr').style;
                 var hap=document.getElementById('happy');
+                var hap1=document.getElementById('txt');
                 socket.emit('user',usrname);
-                hap.innerHTML=`Happy..Chatting ${usrname}`;
+                hap1.innerHTML=`Happy..Chatting ${usrname}`;
                 divusr.display="none";
                 divmsg.display="inline";
                 hap.style.display="inline";
+            }
+            function left(){
+                socket.emit('dis',usrin.value);
+                location.reload();
             }
             input.addEventListener("keyup",function(event){
                 if (event.keyCode===13){
@@ -133,6 +141,10 @@
                 if (data.usr!=usrname){msgdis.innerHTML+=`<div class="messaged" style="text-align: center"><b>${data.des}</b></div><br>`;}
                 else{msgdis.innerHTML+=`<div class="messaged" style="text-align: center" ><b>You are in...</b></div><br>`;}
             });
+            socket.on('errusr',function(data){
+                alert(data.des);
+                location.reload();
+            })
             socket.on('new message',function(data){
                 var usrname=document.getElementById('user').value;
                 var al=document.getElementById('alert').style;
@@ -152,8 +164,15 @@
             });
             socket.on('time', function(timeString) {
                 el = document.getElementById('server-time')
-                el.innerHTML = 'Server time: ' + timeString;
+                el.innerHTML = 'Server : ' + timeString;
+            });
+            socket.on('bye',function(data){
+                var usrname=document.getElementById('user').value;
+                if (data.usr!=usrname){msgdis.innerHTML+=`<div class="messaged" style="text-align: center"><b>${data.des}</b></div><br>`;}
+                else{msgdis.innerHTML+=`<div class="messaged" style="text-align: center" ><b>You are left</b></div><br>`;}
             });
           </script>
+          <div style="text-align: left;"><label style="opacity: 30%;">Created By &nbsp;:&nbsp; Ramanathan</label>
+        <p><b>GitHub &nbsp; :&nbsp;</b>&nbsp;<a href="http://github.com/Ramanathan87">GitHub</a></p></div>
     </body>
 </html> 
