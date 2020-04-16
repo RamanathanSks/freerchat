@@ -69,8 +69,8 @@
             <h1 style="text-align: center;font-family: Cursive;" >RCHaT</h1> 
             <div id="divusr">
                 <div class="form-inline">
-                    <input type="text" class="form-control" id="user" autofocus size="50" placeholder="Name" required>
-                    <button type="button" class="btn btn-primary" id="usrbut">Chat Now..</button>
+                    <input type="text" class="form-control" id="user" onkeyup="check(usrbut)" autofocus size="50" placeholder="Name" required>
+                    <button type="button" class="btn btn-primary" id="usrbut" disabled="true">Chat Now..</button>
                 </div>
             </div>
             <div id="happy">
@@ -88,8 +88,8 @@
               <div class="snd" >
                 <div id="divusr">
                     <div class="form-inline">
-                        <input type="text" placeholder="Type your message.." class="form-control" autofocus size="50" id="msg" required>
-                        <button type="button" class="btn btn-primary" id="snd">Send</button>
+                        <input type="text" placeholder="Type your message.."  onkeyup="check1()" class="form-control" autofocus size="50" id="msg" required>
+                        <button type="button" class="btn btn-primary" disabled="true" id="snd">Send</button>
                         <label id="alert" >plzz enter the message</label>&nbsp;&nbsp;
                     </div>
                 </div>
@@ -101,10 +101,19 @@
             var msgdis=document.getElementById('message_dis');
             var input=document.getElementById('msg');
             var usrin=document.getElementById('user');
+            function check(){
+                if(usrin.value.length==0){
+                    document.getElementById("usrbut").disabled=true;
+                }
+                else{
+                    document.getElementById("usrbut").disabled=false;
+                }
+            }
             usrin.addEventListener("keyup",function(event){
-                if (event.keyCode===13){
+                if(event.keyCode===13 && !document.getElementById("usrbut").disabled){
+                    document.getElementById("usrbut").disabled=false;
                     document.getElementById("usrbut").click();
-                    input.value="";}
+                }
             });
             document.getElementById('usrbut').onclick=function(){
                 var usrname=document.getElementById('user').value;
@@ -122,10 +131,18 @@
                 socket.emit('dis',usrin.value);
                 location.reload();
             }
+            function check1(){
+                if(input.value.length==0){
+                    document.getElementById("snd").disabled=true;
+                }
+                else{
+                    document.getElementById("snd").disabled=false;
+                }
+            }
             input.addEventListener("keyup",function(event){
-                if (event.keyCode===13){
+                if (event.keyCode===13 && !document.getElementById('snd').disabled){
                     document.getElementById("snd").click();
-                    input.value="";}
+                    input.value=null;}
             });
             document.getElementById('snd').onclick = function(){
                 var usrname=document.getElementById('user').value;
