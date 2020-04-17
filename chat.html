@@ -10,12 +10,14 @@
         <title>chatr</title>
         <style>
             .jumbotron {
-            color:black ;
+                color:black ;
+                height: 35%;
             }
             #server-time{
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow';
-                font-size: large;
+                font-size:medium;
                 text-align: right;
+                opacity: 70%;
             }
             .style{
                 padding: 5px;
@@ -26,22 +28,23 @@
             }
             .con{
                 margin: 50px;
-                padding-bottom: 20px;
+                padding-bottom:0px;
             }
             .contain{
-                margin: 30px;
+                margin: 20px;
                 font-size: medium;
-                overflow: scroll;
+                overflow-Y: auto;
                 scroll-behavior: auto,smooth;
             }
             .dis{
                 font-family: Verdana, Geneva, Tahoma, sans-serif;
                 font-size: medium;
                 overflow-x:hidden;
-                overflow-y: visible;
-                margin: 2px;
+                overflow-y:visible;
+                margin: 20px;
             }
             .snd{
+                font-size: medium;
                 scroll-behavior: auto;
                 text-align: center;
             }
@@ -50,9 +53,6 @@
             }
             #divmsg{
                 display:none;
-            }
-            #alert{
-                display: none;
             }
             .messaged{
                 font-size: 20px;
@@ -64,37 +64,36 @@
         </style>
         <script src="/socket.io/socket.io.js"></script>
     </head>
-    <body>
+    <body class="wbd">
         <div class="jumbotron text-center">
             <h1 style="text-align: center;font-family: Cursive;" >RCHaT</h1> 
             <div id="divusr">
                 <div class="form-inline">
                     <input type="text" class="form-control" id="user" onkeyup="check(usrbut)" autofocus size="50" placeholder="Name" required>
                     <button type="button" class="btn btn-primary" id="usrbut" disabled="true">Chat Now..</button>
-                </div>
+                </div> 
             </div>
             <div id="happy">
                 <label id="txt"  style="text-align: center;font-family: Cursive;"></label>
-                <p><button class="btn btn-primary" onclick="left()">leave</button></p>
+                <p><button class="btn btn-primary" data-toggle="modal" data-target="#myModal">Info</button>&nbsp;&nbsp;<button class="btn btn-primary" onclick="left()">leave</button></p>
             </div>
-        </div>  
-        <div id="server-time"></div>
+        </div>
+        
         <div class="contain" id="divmsg">
             <div class="con">
               <div class="style">
                 <div id="message_dis" class="dis"></div>
               </div>
-              <br>
-              <div class="snd" >
-                <div id="divusr">
-                    <div class="form-inline">
-                        <input type="text" placeholder="Type your message.."  onkeyup="check1()" class="form-control" autofocus size="50" id="msg" required>
-                        <button type="button" class="btn btn-primary" disabled="true" id="snd">Send</button>
-                        <label id="alert" >plzz enter the message</label>&nbsp;&nbsp;
-                    </div>
+        </div>
+        <div class="snd" >
+            <div id="divusr">
+                <div class="form-inline">
+                    <input type="text" placeholder="Type your message.."  onkeyup="check1()" class="form-control" autofocus size="50" id="msg" required>
+                    <button type="button" class="btn btn-primary" disabled="true" id="snd">Send</button>
+                    <label id="alert" hidden >plzz enter the message</label>&nbsp;&nbsp;
                 </div>
-              </div>
             </div>
+          </div>
         </div>
           <script>
             var socket=io();
@@ -149,7 +148,6 @@
                 msgdis.scrollTop=msgdis.scrollHeight;
                 var msg=document.getElementById('msg').value;
                 socket.emit('send message',msg,usrname);
-                console.log(usrname);
                 msg="";
                 input.value="";
             }
@@ -175,9 +173,7 @@
                     al.display="none";
                 }
                 else{
-                    
-                    al.display="inline";
-                }
+                    al.display="inline";}
             });
             socket.on('time', function(timeString) {
                 el = document.getElementById('server-time')
@@ -189,7 +185,24 @@
                 else{msgdis.innerHTML+=`<div class="messaged" style="text-align: center" ><b>You are left</b></div><br>`;}
             });
           </script>
-          <div style="text-align: left;"><label style="opacity: 30%;">Created By &nbsp;:&nbsp; Ramanathan</label>
-        <p><b>GitHub &nbsp; :&nbsp;</b>&nbsp;<a href="http://github.com/Ramanathan87" target="__blank">GitHub</a></p></div>
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Info</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: left;"><label ><b style="opacity: 30%;">Created By  &nbsp;:</b>&nbsp;     Ramanathan</label>
+                        <p><b style="opacity: 30%;">Source &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;</b>&nbsp;<a href="http://github.com/Ramanathan87" target="__blank">GitHub</a></p></div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="server-time"></div> 
     </body>
 </html> 
